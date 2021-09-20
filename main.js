@@ -30,4 +30,6 @@ client.on('message', message =>{
 
 })
 
+require('./server')();
 client.login(process.env.TOKEN);
+const mySecret = process.env['TOKEN']
