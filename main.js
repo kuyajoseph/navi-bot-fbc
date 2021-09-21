@@ -30,7 +30,4 @@ client.on('messageCreate', message =>{
 
 })
 require('./server')();
-client.login(process.env.TOKEN);
-const mySecret = process.env['TOKEN']
-
-console.log(process.version)
+client.login(NzUzMDU0ODg1MTc5NTU1OTgw.X1gnAw.nh15YF9oQe9Y85YjsX4qJR59-k4);
