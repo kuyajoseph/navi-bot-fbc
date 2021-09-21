@@ -1,10 +1,10 @@
 const { Client } = require('discord.js');
 
-const client = new Discord.Client({intents: 32767})
+const client = new Client({intents: 32767})
 
 const prefix = '+';
 
-client.once('!', () => {
+client.once('ready', () => {
     console.log('Navi is online!');
     client.user.setActivity("hacking a mainframe", { type: "WATCHING" })
 });
