@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 require('dotenv').config();
 const client = new Discord.Client({intents: 32767})
 
-const prefix = '+';
+const prefix = process.env.PREFIX;
 
 client.once('ready', () => {
     console.log('Navi is online!');
