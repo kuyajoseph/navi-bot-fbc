@@ -1,6 +1,6 @@
-const { Client } = require('discord.js');
+const { Discord.Client } = require('discord.js');
 
-const client = new Client({intents: 32767})
+const client = new Discord.Client({intents: 32767})
 
 const prefix = '+';
 
