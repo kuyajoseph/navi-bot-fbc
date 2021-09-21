@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
- 
-js 
+
 const client = new Client({intents: 32767})
 
 const prefix = '+';
