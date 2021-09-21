@@ -1,4 +1,4 @@
-const { Discord.Client } = require('discord.js');
+const { client } = require('discord.js');
 
 const client = new Discord.Client({intents: 32767})
 
