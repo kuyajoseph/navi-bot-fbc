@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-
+require('dotenv').config();
 const client = new Discord.Client({intents: 32767})
 
 const prefix = '+';
@@ -31,4 +31,3 @@ client.on('messageCreate', message =>{
 })
 require('./server')();
 client.login(process.env.TOKEN);
-const mySecret = process.env['NzUzMDU0ODg1MTc5NTU1OTgw.X1gnAw.nh15YF9oQe9Y85YjsX4qJR59-k4']
