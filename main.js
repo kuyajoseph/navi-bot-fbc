@@ -17,7 +17,9 @@ client.on('guildMemberAdd', guildMember =>{
     guildMember.guild.channels.cache.get('752955435681841252').send(`Welcome <@${guildMember.user.id}> to the official FBC Youth server! Please read our <#752955457647149089> and <#752955583749161033>, then introduce yourself in <#752955636043743256>. We pray you're blessed, prepared for edification, and ready to have a fun, Christ-centered fellowship with us! We hope you enjoy your stay.`)
 });
 
-client.on('message', message =>{
+client.on('messageCreate', message =>{
+
+})
     if(!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).split(/ +/);
@@ -28,8 +30,6 @@ client.on('message', message =>{
     } else if (command === 'welcome'){
         message.channel.send("Welcome <@753054885179555980> to the official FBC Youth server! Please read our <#752955457647149089> and <#752955583749161033>, then introduce yourself in <#752955636043743256>. We pray you're blessed, prepared for edification, and ready to have a fun, Christ-centered fellowship with us! We hope you enjoy your stay.");
     } 
-
-})
 
 require('./server')();
 client.login(process.env.TOKEN);
