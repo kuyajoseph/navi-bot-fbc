@@ -10,13 +10,13 @@ function keepAlive(){
 module.exports = keepAlive;
 // ================= START BOT CODE ===================
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const client = new Discord.Client({intents: 32767})
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('message', msg => {
+client.on('messageCreate', message => {
   if (msg.content === 'ping') {
     msg.reply('pong!');
   }
