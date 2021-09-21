@@ -6,7 +6,7 @@ const prefix = process.env.PREFIX;
 
 client.once('ready', () => {
     console.log('Navi is online!');
-    client.user.setActivities("hacking a mainframe", { type: "PLAYING" })
+    client.user.setActivity(`hacking a mainframe`, {type: 'PLAYING'});
 });
 
 client.on('guildMemberAdd', guildMember =>{
