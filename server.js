@@ -2,18 +2,18 @@ const express = require('express');
 const server = express();
 const port = 3000;
 server.all('/', (req, res)=>{
-    res.send('Systems online!')
+    res.send('Here come the buffs!')
 })
 function keepAlive(){
-    server.listen(3000, ()=>{console.log("Systems Online!")});
+    server.listen(3000, ()=>{console.log("Here come the buffs!")});
 }
 module.exports = keepAlive;
 // ================= START BOT CODE ===================
 const Discord = require('discord.js');
 const client = new Discord.Client({intents: 32767})
 
-client.once('ready', () => {
-  console.log('Navi is online!');
+client.on('ready', () => {
+  console.log(`Logged in as ${client.user.tag}!`);
 });
 
 client.on('messageCreate', message =>{

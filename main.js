@@ -5,7 +5,7 @@ const client = new Discord.Client({intents: 32767})
 const prefix = process.env.PREFIX;
 
 client.once('ready', () => {
-    console.log('Navi is online!');
+    console.log('Systems online!');
     client.user.setActivity(`hacking a mainframe`, {type: 'PLAYING'});
 });
 
