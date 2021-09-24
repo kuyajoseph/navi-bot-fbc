@@ -28,10 +28,13 @@ client.on('messageCreate', message =>{
     } else if (command === 'dm'){
         message.author.send("Ain't no time like the present, whadaya need?");
     } else if (command === 'users')
-        client.users.fetch('608917274296057856, 347410931476725781').then(user => {
-        user.send("Hello World!");
+        client.users.fetch('347410931476725781').then(user => {
+        user.send("Heya Josiah!");
+        client.users.fetch('608917274296057856').then(user => {
+        user.send("Heya John David!");
+        })
     })
 })
-
+        
 require('./server')();
 client.login(process.env.TOKEN);
