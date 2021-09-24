@@ -18,6 +18,14 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
+client.on('messageCreate', message =>{
+  if(!message.content.startsWith(prefix) || message.author.bot) return;
+  
+  const args = message.content.slice(prefix.length).split(/ +/);
+  const command = args.shift().toLowerCase();
+  
+})
+
 // You really don't want your token here since your repl's code
 // is publically available. We'll take advantage of a Repl.it 
 // feature to hide the token we got earlier. 
