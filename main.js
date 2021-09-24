@@ -28,7 +28,7 @@ client.on('messageCreate', message =>{
     } else if (command === 'dm'){
         message.author.send("Ain't no time like the present, whadaya need?");
     } else if (command === 'users')
-    client.users.fetch('560722709529493504').then(user => {
+    client.users.fetch('389558217035874308').then(user => {
         user.send("Heya Joseph! I was updating the youth server and noticed that you've completed your mission. Great job leader! See ya on the next mission!");
     })
 })
