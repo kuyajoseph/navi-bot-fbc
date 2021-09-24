@@ -12,6 +12,8 @@ module.exports = keepAlive;
 const Discord = require('discord.js');
 const client = new Discord.Client({intents: 32767})
 
+const prefix = process.env.PREFIX;
+
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
