@@ -28,9 +28,15 @@ client.on('messageCreate', message =>{
     } else if (command === 'dm'){
         message.author.send("Ain't no time like the present, whadaya need?");
     } else if (command === 'users')
-    client.users.fetch('389558217035874308').then(user => {
-        user.send("Heya Joseph! I was updating the youth server and noticed that you've completed your mission. Great job leader! See ya on the next mission!");
+        client.users.fetch('560722709529493504').then(user => {
+        user.send("Heya Matthew! I was updating the youth server and noticed you haven't reacted to the 'Oakland', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('576633127900807182').then(user => {
+        user.send("Heya Sean! I was updating the youth server and noticed you haven't reacted to the 'Vallejo', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('560722709529493504').then(user => {
+        user.send("Heya Gio! I was updating the youth server and noticed you haven't reacted to the 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
     })
+})
+})
 })
 require('./server')();
 client.login(process.env.TOKEN);
