@@ -28,8 +28,8 @@ client.on('messageCreate', message =>{
     } else if (command === 'dm'){
         message.author.send("Ain't no time like the present, whadaya need?");
     } else if (command === 'users')
-    client.users.fetch('293920627868565507').then(user => {
-        user.send("My bad, server backlogs were incorrect. You already have all the roles, hooray!")
+    client.users.fetch('389558217035874308').then(user => {
+        user.send("Heya Joseph! I'm currently doing the weekly updates for the youth server and noticed that you've completed your mission. Great job leader! See ya on the next mission!");
     })
 })
 require('./server')();
