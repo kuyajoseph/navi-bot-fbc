@@ -28,8 +28,101 @@ client.on('messageCreate', message =>{
     } else if (command === 'dm'){
         message.author.send("Ain't no time like the present, whadaya need?");
     } else if (command === 'users')
-    client.users.fetch('389558217035874308').then(user => {
+        client.users.fetch('389558217035874308').then(user => {
         user.send("Heya Joseph! I'm currently doing the weekly updates for the youth server and noticed that you've completed your mission. Great job leader! See ya on the next mission!");
+        client.users.fetch('159891741749542912').then(user => {
+        user.send("Heya Judges! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Matchmaking' and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('194313702319718400').then(user => {
+        user.send("Heya Renz! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Matchmaking' and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('569292352909344778').then(user => {
+        user.send("Heya Jed! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('365993064294252555').then(user => {
+        user.send("Heya Daniel! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('721061481843523635').then(user => {
+        user.send("Heya Jireh! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('219166875962048513').then(user => {
+        user.send("Heya Tammy! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Vallejo', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('364934686595874817').then(user => {
+        user.send("Heya Noah! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Vallejo', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('437115064265343000').then(user => {
+        user.send("Heya Elijah! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('581679951099723801').then(user => {
+        user.send("Heya Alyza! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('698267376399024168').then(user => {
+        user.send("Heya Ashley! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Vallejo', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('254889264393879552').then(user => {
+        user.send("Heya Ben! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Visitor', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('752766831986737263').then(user => {
+        user.send("Heya Ben! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Oakland', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('429056649454682113').then(user => {
+        user.send("Heya Aris! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('689679540183629857').then(user => {
+        user.send("Heya Arden! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('455113092452450304').then(user => {
+        user.send("Heya Devon! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Tri-City', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('217133608261910528').then(user => {
+        user.send("Heya Dante! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Tri-City', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('754170214777618562').then(user => {
+        user.send("Heya Isaiah! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Tri-City', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('594595675677655082').then(user => {
+        user.send("Heya Jadrian! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('710012819168297003').then(user => {
+        user.send("Heya Janessa! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Oakland', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('861080072701739058').then(user => {
+        user.send("Heya Jarrod! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('437790888803172372').then(user => {
+        user.send("Heya Juju! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Tri-City', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('216786154211639316').then(user => {
+        user.send("Heya Patrick! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Visitor', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('754151242149920880').then(user => {
+        user.send("Heya Tabs! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('619264112870031391').then(user => {
+        user.send("Heya Leanne! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('822904403664044103').then(user => {
+        user.send("Heya Liam! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Visitor', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('213172303876456449').then(user => {
+        user.send("Heya Momo! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('341032873433759756').then(user => {
+        user.send("Heya Jeremy! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('379018505149874186').then(user => {
+        user.send("Heya Bodek! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('560722709529493504').then(user => {
+        user.send("Heya Matthew! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Oakland', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('114115642176700418').then(user => {
+        user.send("Heya Gio! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('576633127900807182').then(user => {
+        user.send("Heya Sean! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Vallejo', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+           })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
+    })
     })
 })
 require('./server')();
