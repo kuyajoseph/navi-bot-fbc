@@ -68,14 +68,10 @@ client.on('messageCreate', message =>{
         user.send("Heya Jadrian! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
         client.users.fetch('710012819168297003').then(user => {
         user.send("Heya Janessa! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Oakland', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
-        client.users.fetch('861080072701739058').then(user => {
-        user.send("Heya Jarrod! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
         client.users.fetch('437790888803172372').then(user => {
         user.send("Heya Juju! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Tri-City', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
         client.users.fetch('216786154211639316').then(user => {
         user.send("Heya Patrick! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Visitor', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
-        client.users.fetch('754151242149920880').then(user => {
-        user.send("Heya Tabs! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
         client.users.fetch('619264112870031391').then(user => {
         user.send("Heya Leanne! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
         client.users.fetch('822904403664044103').then(user => {
@@ -123,7 +119,5 @@ client.on('messageCreate', message =>{
     })
     })
     })
-    })
-})
 require('./server')();
 client.login(process.env.TOKEN);
