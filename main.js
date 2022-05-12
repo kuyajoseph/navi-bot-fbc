@@ -88,7 +88,13 @@ client.on('messageCreate', message =>{
         user.send("Heya Sean! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Vallejo', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
         client.users.fetch('441379280102883329').then(user => {
         user.send("Heya Marc! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
-        })
+        client.users.fetch('145026384740220928').then(user => {
+        user.send("Heya Luis! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        client.users.fetch('145026384740220928').then(user => {
+        user.send("Heya LJ! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Vallejo', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+    })
+    })
+    })
     })
     })
     })
