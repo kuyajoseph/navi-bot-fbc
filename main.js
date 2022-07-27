@@ -26,7 +26,7 @@ client.on("guildMemberUpdate", (oldMember, newMember) => {
     if(oldStatus && !newStatus) {
         client.channels.cache.get('752955547942387752').send(`${newMember.user.tag} has unboosted the server!`)
     }
-})
+});
 
 client.on('messageCreate', message =>{
     if(!message.content.startsWith(prefix) || message.author.bot) return;
