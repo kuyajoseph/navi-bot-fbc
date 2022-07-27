@@ -15,23 +15,6 @@ client.on('guildMemberAdd', guildMember =>{
     guildMember.guild.channels.cache.get('752955435681841252').send(`Welcome <@${guildMember.user.id}> to the official FBC Youth server! Please read our <#752955457647149089> and <#752955583749161033>, then introduce yourself in <#752955636043743256>. Are you ready to steal the world's treasure and take their hearts? I believe that your life will change, so wake up, get up, and get out there. It's showtime!`)
 });
 
-client.on("guildMemberUpdate", (oldMember, newMember) => {
-    const oldStatus = oldMember.premiumSince;
-    const newStatus = newMember.premiumSince;
-
-    if(!oldStatus && newStatus) {
-        client.channels.cache
-        .get('752955547942387752')
-        .send(`${newMember.user.tag} has boosted the server!`);
-    }
-
-    if(oldStatus && !newStatus) {
-        client.channels.cache
-        .get('752955547942387752')
-        .send(`${newMember.user.tag} has unboosted the server!`);
-    }
-});
-
 client.on('messageCreate', message =>{
     if(!message.content.startsWith(prefix) || message.author.bot) return;
 
@@ -46,10 +29,6 @@ client.on('messageCreate', message =>{
         message.channel.send("Welcome <@441379280102883329> to the official FBC Youth server! Please read our <#752955457647149089> and <#752955583749161033>, then introduce yourself in <#752955636043743256>. Are you ready to steal the world's treasure and take their hearts? I believe that your life will change, so wake up, get up, and get out there. It's showtime!");
     } else if (command === 'dm'){
         message.author.send("Ain't no time like the present, whadaya need?");
-    } else if (command === 'boost'){
-        message.author.send("<@389558217035874308> has boosted the server!");
-    } else if (command === 'boosted'){
-        message.author.send("<@389558217035874308> has boosted the server! FBC Youth has achieved **Level 1!**");
     } else if (command === 'users')
         client.users.fetch('389558217035874308').then(user => {
         user.send("Heya Joseph! I'm currently doing the weekly updates for the youth server and noticed that you've completed your mission. Great job leader! See ya on the next mission!");
