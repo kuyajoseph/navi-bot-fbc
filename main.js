@@ -118,7 +118,7 @@ client.on('messageCreate', message =>{
         client.users.fetch('586372063409733636').then(user => {
         user.send("Heya Jonathan! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Metagame' role, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
         client.users.fetch('994090349620363397').then(user => {
-        user.send("Heya Pontius! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Metagame' role, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
+        user.send("Heya Pontius! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'San Francisco', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
     })
     })
     })
