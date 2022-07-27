@@ -45,7 +45,7 @@ client.on('messageCreate', message =>{
     } else if (command === 'boost'){
         message.author.send("<@389558217035874308> has boosted the server!");
     } else if (command === 'boosted'){
-    message.author.send("<@389558217035874308> has boosted the server! FBC Youth has achieved **Level 1!**");
+        message.author.send("<@389558217035874308> has boosted the server! FBC Youth has achieved **Level 1!**");
     } else if (command === 'users')
         client.users.fetch('389558217035874308').then(user => {
         user.send("Heya Joseph! I'm currently doing the weekly updates for the youth server and noticed that you've completed your mission. Great job leader! See ya on the next mission!");
