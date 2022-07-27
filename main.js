@@ -20,11 +20,15 @@ client.on("guildMemberUpdate", (oldMember, newMember) => {
     const newStatus = newMember.premiumSince;
 
     if(!oldStatus && newStatus) {
-        client.channels.cache.get('752955547942387752').send(`${newMember.user.tag} has boosted the server!`)
+        client.channels.cache
+        .get('752955547942387752')
+        .send(`${newMember.user.tag} has boosted the server!`);
     }
 
     if(oldStatus && !newStatus) {
-        client.channels.cache.get('752955547942387752').send(`${newMember.user.tag} has unboosted the server!`)
+        client.channels.cache
+        .get('752955547942387752')
+        .send(`${newMember.user.tag} has unboosted the server!`);
     }
 });
 
