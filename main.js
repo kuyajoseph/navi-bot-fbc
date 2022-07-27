@@ -32,9 +32,7 @@ client.on('messageCreate', message =>{
     if(!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).split(/ +/);
-    const command = args.shift().toLowerCase();
-
-})
+    const command = args.shift().toLowerCase();})
 
     if (command === 'help'){
     message.channel.send("Support's on the Way! https://www.youtube.com/codelyon");
