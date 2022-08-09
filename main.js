@@ -11,10 +11,12 @@ client.once('ready', () => {
 
 client.on('guildMemberAdd', guildMember =>{
     let welcomeRole = guildMember.guild.roles.cache.find(role => role.name === 'everyone');
+
     guildMember.roles.add(welcomeRole);
     guildMember.guild.channels.cache.get('752955435681841252').send(`Welcome <@${guildMember.user.id}> to the official FBC Youth server! Please read our <#752955457647149089> and <#752955583749161033>, then introduce yourself in <#752955636043743256>. Are you ready to steal the world's treasure and take their hearts? I believe that your life will change, so wake up, get up, and get out there. It's showtime!`)
+});
 
-client.on("guildMemberUpdate", (oldMember, newMember) => {
+client.on('guildMemberUpdate', (oldMember, newMember) => {
     const oldStatus = oldMember.premiumSince;
     const newStatus = newMember.premiumSince;
 
@@ -120,7 +122,6 @@ client.on('messageCreate', message => {
         user.send("Heya Faith! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Vallejo', 'Community Events', 'Matchmaking', and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
         });
     });
-});
 });
 });
 });
