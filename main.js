@@ -14,7 +14,6 @@ client.on('guildMemberAdd', guildMember =>{
 
     guildMember.roles.add(welcomeRole);
     guildMember.guild.channels.cache.get('752955435681841252').send(`Welcome <@${guildMember.user.id}> to the official FBC Youth server! Please read our <#752955457647149089> and <#752955583749161033>, then introduce yourself in <#752955636043743256>. Are you ready to steal the world's treasure and take their hearts? I believe that your life will change, so wake up, get up, and get out there. It's showtime!`)
-});
 
 client.on('guildMemberUpdate', (oldMember, newMember) => {
     const oldStatus = oldMember.premiumSince;
@@ -31,7 +30,6 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
         .get('752955547942387752')
         .send(`${newMember.user.tag} has unboosted the server!`);
     }
-});
 
 client.on('messageCreate', message => {
     if(!message.content.startsWith(prefix) || message.author.bot) return;
@@ -125,6 +123,8 @@ client.on('messageCreate', message => {
         });
     });
     });
+});
+});
 });
 });
 });
