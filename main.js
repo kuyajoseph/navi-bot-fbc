@@ -1,12 +1,16 @@
 const Discord = require('discord.js');
 require('dotenv').config();
 const client = new Discord.Client({intents: 32767})
+const fs = require('fs');
+
+const memberCounter = require('./counters/member-counter');
 
 const prefix = process.env.PREFIX;
 
 client.once('ready', () => {
     console.log('Systems online!');
     client.user.setActivity(`hacking a mainframe`, {type: 'PLAYING'});
+    memberCounter(client);
 });
 
 client.on('guildMemberAdd', guildMember =>{
