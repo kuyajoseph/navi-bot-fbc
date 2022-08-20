@@ -30,6 +30,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
         .get('752955547942387752')
         .send(`${newMember.user.tag} has unboosted the server!`);
     }
+});
 
 client.on('messageCreate', message => {
     if(!message.content.startsWith(prefix) || message.author.bot) return;
@@ -123,7 +124,6 @@ client.on('messageCreate', message => {
         });
     });
     });
-});
 });
 });
 });
