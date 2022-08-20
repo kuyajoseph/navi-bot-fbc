@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 require('dotenv').config();
 const client = new Discord.Client({intents: 32767})
-const fs = require('fs');
 
 const memberCounter = require('./counters/member-counter');
 
