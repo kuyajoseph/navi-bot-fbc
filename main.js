@@ -3,20 +3,9 @@ require('dotenv').config();
 const client = new Discord.Client({intents: 32767})
 const prefix = process.env.PREFIX;
 
-const memberCounter = require('./counters/member-counter');
-const userCounter = require('./counters/user-counter');
-const botCounter = require('./counters/bot-counter');
-const roleCounter = require('./counters/role-counter');
-const channelCounter = require('./counters/channel-counter');
-
 client.once('ready', () => {
     console.log('Systems online!');
     client.user.setActivity(`hacking a mainframe`, {type: 'PLAYING'});
-    memberCounter(client);
-    userCounter(client);
-    botCounter(client);
-    roleCounter(client);
-    channelCounter(client);
 });
 
 client.on('guildMemberAdd', guildMember =>{
