@@ -7,5 +7,3 @@ module.exports = async (client) =>{
         console.log('Updating Member Count');
     }, 5000);
 }
-
-1000 = 1,000
