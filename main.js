@@ -161,4 +161,3 @@ client.on('messageCreate', message => {
 });
 require('./server')();
 client.login(process.env.TOKEN);
-
