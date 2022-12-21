@@ -41,7 +41,7 @@ client.on('messageCreate', message => {
     if (command === 'help'){
         message.channel.send("Support's on the Way! https://www.youtube.com/codelyon , https://sourceb.in/ , https://dashboard.heroku.com/apps , and https://uptimerobot.com/login?rt=https://uptimerobot.com/dashboard#789227729");
     } else if (command === 'welcome'){
-        message.channel.send("Welcome <@1000977103942078565> to the official FBC Youth server! Please read our <#752955457647149089> and <#752955583749161033>, then introduce yourself in <#752955636043743256>. Are you ready to steal the world's treasure and take their hearts? I believe that your life will change, so wake up, get up, and get out there. It's showtime!");
+        message.channel.send("Welcome <@724741222911967232> to the official FBC Youth server! Please read our <#752955457647149089> and <#752955583749161033>, then introduce yourself in <#752955636043743256>. Are you ready to steal the world's treasure and take their hearts? I believe that your life will change, so wake up, get up, and get out there. It's showtime!");
     } else if (command === 'dm'){
         message.author.send("Ain't no time like the present, whadaya need?");
     } else if (command === 'boost'){
