@@ -49,7 +49,7 @@ client.on('messageCreate', message => {
         const targetChannel = message.guild.channels.cache.get('752955435681841252');
         if (targetChannel && targetChannel.isText()) {
             targetChannel.send(
-                "Welcome <@1307905406126788658> to the official FBC Youth server! Please read our <#752955457647149089> and <#752955583749161033>, then introduce yourself in <#752955636043743256>. Are you ready to steal the world's treasure and take their hearts? I believe that your life will change, so wake up, get up, and get out there. It's showtime!"
+                "Welcome <@636675814410289190> to the official FBC Youth server! Please read our <#752955457647149089> and <#752955583749161033>, then introduce yourself in <#752955636043743256>. Are you ready to steal the world's treasure and take their hearts? I believe that your life will change, so wake up, get up, and get out there. It's showtime!"
             ).catch(console.error);
         } else {
             console.error("Target channel not found or is not a text channel!");
