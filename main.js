@@ -63,7 +63,7 @@ client.on('messageCreate', message => {
         user.send("Heya Joseph! I'm currently doing the weekly updates for the youth server and noticed that you've completed your mission. Great job leader! See ya on the next mission!");
         });
         client.users.fetch('636675814410289190').then(user => {
-        user.send("Heya Allissa! This is your daily reminder that you are beautiful, valuable, and good. Joseph loves you and Jesus loves you even more! Take it easy today okay :)");
+        user.send("Heya Allissa! This is your daily reminder that you are beautiful, valuable, and good. Joseph loves you and Jesus loves you even more! Take it easy today okay Aya :)");
         });
         // client.users.fetch('[user id]').then(user => {
         // user.send("Heya [Name]! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Matchmaking' and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
