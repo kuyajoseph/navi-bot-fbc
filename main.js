@@ -68,13 +68,13 @@ client.on('messageCreate', message => {
         })
         .then(() => {
             console.log("DM successfully sent.");
-            client.users.fetch('YOUR_USER_ID').then(me => {
+            client.users.fetch('389558217035874308').then(me => {
                 me.send("The DM was successfully sent.");
             });
         })
         .catch(err => {
             console.error("Failed to send DM:", err);
-            client.users.fetch('YOUR_USER_ID').then(me => {
+            client.users.fetch('389558217035874308').then(me => {
                 me.send("The DM failed to send. Check logs.");
             });
         });
