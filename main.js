@@ -65,6 +65,9 @@ client.on('messageCreate', message => {
         client.users.fetch('636675814410289190').then(user => {
         user.send("Heya Allissa! This is your daily reminder that you are beautiful, valuable, and good. Joseph loves you and Jesus loves you even more! Take it easy today okay Aya :)");
         });
+        client.users.fetch('636675814410289190').then(user => {
+        user.send("For you to have serene, blissful, and sweet dreams tonight: https://open.spotify.com/playlist/5BhU4lwIx1BTalGXqNdGYO?si=Wfk4xzUTQ5-NQpI2vVSLDQ&utm_source=copy-link&pt=a3590ffce342750e096afcc1e421c874&pi=cMKxSsgQTFuMr&sci=spotify%3Acard-config%3A4eh6hfh0tdShyK08GI6TBM");
+        });
         // client.users.fetch('[user id]').then(user => {
         // user.send("Heya [Name]! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Matchmaking' and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
         // });
@@ -72,6 +75,10 @@ client.on('messageCreate', message => {
     } else if (command === 'camp'){
         message.channel.send(`<@[channel id]>`);
     }
+
+    client.users.fetch('1234567890').then(user => {
+    user.send("")
+    })
 
 });
 
