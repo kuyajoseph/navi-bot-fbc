@@ -59,25 +59,52 @@ client.on('messageCreate', message => {
         message.channel.send("<@389558217035874308> has boosted the server! FBC Youth has achieved **Level 1!**");
     
     } else if (command === 'dm'){
-        client.users.fetch('389558217035874308').then(user => {
-        user.send("For you to have serene, blissful, and sweet dreams tonight: https://open.spotify.com/playlist/5BhU4lwIx1BTalGXqNdGYO?si=Wfk4xzUTQ5-NQpI2vVSLDQ&utm_source=copy-link&pt=a3590ffce342750e096afcc1e421c874&pi=cMKxSsgQTFuMr&sci=spotify%3Acard-config%3A4eh6hfh0tdShyK08GI6TBM");
-        });
-        client.users.fetch('636675814410289190')
-        .then(user => {
-            return user.send("For you to have serene, blissful, and sweet dreams tonight: https://open.spotify.com/playlist/5BhU4lwIx1BTalGXqNdGYO?si=Wfk4xzUTQ5-NQpI2vVSLDQ&utm_source=copy-link&pt=a3590ffce342750e096afcc1e421c874&pi=cMKxSsgQTFuMr&sci=spotify%3Acard-config%3A4eh6hfh0tdShyK08GI6TBM");
-        })
+    const me = '389558217035874308';           // your ID
+    const target = '636675814410289190';       // other user ID
+    const messageText = "For you to have serene, blissful, and sweet dreams tonight: https://open.spotify.com/playlist/5BhU4lwIx1BTalGXqNdGYO?si=Wfk4xzUTQ5-NQpI2vVSLDQ&utm_source=copy-link&pt=a3590ffce342750e096afcc1e421c874&pi=cMKxSsgQTFuMr&sci=spotify%3Acard-config%3A4eh6hfh0tdShyK08GI6TBM";
+
+    // Send DM to yourself
+    client.users.fetch(me).then(user => {
+        user.send(messageText);
+    });
+
+    // Send DM to the other user + confirmation
+    client.users.fetch(target)
+        .then(user => user.send(messageText))
         .then(() => {
-            console.log("DM successfully sent.");
-            client.users.fetch('389558217035874308').then(me => {
-                me.send("The DM was successfully sent.");
-            });
-        })
-        .catch(err => {
-            console.error("Failed to send DM:", err);
-            client.users.fetch('389558217035874308').then(me => {
-                me.send("The DM failed to send. Check logs.");
-            });
+        console.log("DM successfully sent.");
+        return client.users.fetch(me);
+    })
+    .then(meUser => {
+        meUser.send("The DM was successfully sent.");
+    })
+    .catch(err => {
+        console.error("Failed to send DM:", err);
+        client.users.fetch(me).then(meUser => {
+            meUser.send("The DM failed to send. Check logs.");
         });
+    });
+
+        
+        // client.users.fetch('389558217035874308').then(user => {
+        // user.send("For you to have serene, blissful, and sweet dreams tonight: https://open.spotify.com/playlist/5BhU4lwIx1BTalGXqNdGYO?si=Wfk4xzUTQ5-NQpI2vVSLDQ&utm_source=copy-link&pt=a3590ffce342750e096afcc1e421c874&pi=cMKxSsgQTFuMr&sci=spotify%3Acard-config%3A4eh6hfh0tdShyK08GI6TBM");
+        // });
+        // client.users.fetch('636675814410289190')
+        // .then(user => {
+        //     return user.send("For you to have serene, blissful, and sweet dreams tonight: https://open.spotify.com/playlist/5BhU4lwIx1BTalGXqNdGYO?si=Wfk4xzUTQ5-NQpI2vVSLDQ&utm_source=copy-link&pt=a3590ffce342750e096afcc1e421c874&pi=cMKxSsgQTFuMr&sci=spotify%3Acard-config%3A4eh6hfh0tdShyK08GI6TBM");
+        // })
+        // .then(() => {
+        //     console.log("DM successfully sent.");
+        //     client.users.fetch('389558217035874308').then(me => {
+        //         me.send("The DM was successfully sent.");
+        //     });
+        // })
+        // .catch(err => {
+        //     console.error("Failed to send DM:", err);
+        //     client.users.fetch('389558217035874308').then(me => {
+        //         me.send("The DM failed to send. Check logs.");
+        //     });
+        // });
 
         // client.users.fetch('389558217035874308').then(user => {
         // user.send("Heya Joseph! I'm currently doing the weekly updates for the youth server and noticed that you've completed your mission. Great job leader! See ya on the next mission!");
