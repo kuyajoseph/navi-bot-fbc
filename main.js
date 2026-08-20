@@ -59,31 +59,40 @@ client.on('messageCreate', message => {
         message.channel.send("<@389558217035874308> has boosted the server! FBC Youth has achieved **Level 1!**");
     
     } else if (command === 'dm'){
-    const me = '389558217035874308';           // your ID
-    const target = '636675814410289190';       // other user ID
-    const messageText = "For you to have serene, blissful, and sweet dreams tonight: https://open.spotify.com/playlist/5BhU4lwIx1BTalGXqNdGYO?si=Wfk4xzUTQ5-NQpI2vVSLDQ&utm_source=copy-link&pt=a3590ffce342750e096afcc1e421c874&pi=cMKxSsgQTFuMr&sci=spotify%3Acard-config%3A4eh6hfh0tdShyK08GI6TBM";
+    client.users.fetch('389558217035874308').then(user => {
+        user.send("Heya Joseph! I'm currently doing the weekly updates for the youth server and noticed that you've completed your mission. Great job leader! See ya on the next mission!");
+        });
+    
+    client.users.fetch('636675814410289190').then(user => {
+        user.send("Heya Allissa! This is your daily reminder that you are beautiful, valuable, and good. Joseph loves you and Jesus loves you even more! Take it easy today okay Aya :)");
+        });
+    
+    // } else if (command === 'dm'){
+    // const me = '389558217035874308';           // your ID
+    // const target = '636675814410289190';       // other user ID
+    // const messageText = "For you to have serene, blissful, and sweet dreams tonight: https://open.spotify.com/playlist/5BhU4lwIx1BTalGXqNdGYO?si=Wfk4xzUTQ5-NQpI2vVSLDQ&utm_source=copy-link&pt=a3590ffce342750e096afcc1e421c874&pi=cMKxSsgQTFuMr&sci=spotify%3Acard-config%3A4eh6hfh0tdShyK08GI6TBM";
 
     // Send DM to yourself
-    client.users.fetch(me).then(user => {
-        user.send(messageText);
-    });
+    // client.users.fetch(me).then(user => {
+    //    user.send(messageText);
+    // });
 
     // Send DM to the other user + confirmation
-    client.users.fetch(target)
-        .then(user => user.send(messageText))
-        .then(() => {
-        console.log("DM successfully sent.");
-        return client.users.fetch(me);
-    })
-    .then(meUser => {
-        meUser.send("The DM was successfully sent.");
-    })
-    .catch(err => {
-        console.error("Failed to send DM:", err);
-        client.users.fetch(me).then(meUser => {
-            meUser.send("The DM failed to send. Check logs.");
-        });
-    });
+    // client.users.fetch(target)
+    //    .then(user => user.send(messageText))
+    //    .then(() => {
+    //    console.log("DM successfully sent.");
+    //    return client.users.fetch(me);
+    //})
+    //.then(meUser => {
+    //    meUser.send("The DM was successfully sent.");
+    //})
+    //.catch(err => {
+    //    console.error("Failed to send DM:", err);
+    //    client.users.fetch(me).then(meUser => {
+    //        meUser.send("The DM failed to send. Check logs.");
+    //    });
+    //});
 
         
         // client.users.fetch('389558217035874308').then(user => {
@@ -105,14 +114,8 @@ client.on('messageCreate', message => {
         //         me.send("The DM failed to send. Check logs.");
         //     });
         // });
-
-        // client.users.fetch('389558217035874308').then(user => {
-        // user.send("Heya Joseph! I'm currently doing the weekly updates for the youth server and noticed that you've completed your mission. Great job leader! See ya on the next mission!");
-        // });
-        // client.users.fetch('636675814410289190').then(user => {
-        // user.send("Heya Allissa! This is your daily reminder that you are beautiful, valuable, and good. Joseph loves you and Jesus loves you even more! Take it easy today okay Aya :)");
-        // });
         
+
         // client.users.fetch('[user id]').then(user => {
         // user.send("Heya [Name]! I'm currently doing the weekly updates for the youth server and noticed you haven't reacted to the 'Matchmaking' and 'Metagame' roles, meaning you don't have access to the entire server. I don't want you to miss out some stuff, so in order to change that, please head on over and read the info in the 'rules' and 'flairing' channels, then self-assign yourself by reacting to the roles you're missing. (consider it a free buff!) See ya on the next mission!");
         // });
