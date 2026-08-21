@@ -64,13 +64,13 @@ client.on('messageCreate', message => {
         });
     
     client.users.fetch('636675814410289190').then(user => {
-        user.send("Heya Allissa! Joseph wanted me to let you know that he's praying for you so much for your 1-on-1 meeting soon. J loves you so much :)");
+        user.send("Heya Allissa! This is your daily reminder that you are beautiful, valuable, and good. Joseph loves you and Jesus loves you even more! Take it easy today okay Aya :)");
         });
     
-    //    client.users.fetch('636675814410289190').then(user => {
-    //    user.send("Heya Allissa! This is your daily reminder that you are beautiful, valuable, and good. Joseph loves you and Jesus loves you even more! Take it easy today okay Aya :)");
+    //client.users.fetch('636675814410289190').then(user => {
+    //    user.send("Heya Allissa! Joseph wanted me to let you know that he's praying for you so much for your 1-on-1 meeting soon. J loves you so much :)");
     //    });
-    
+
     // } else if (command === 'dm'){
     // const me = '389558217035874308';           // your ID
     // const target = '636675814410289190';       // other user ID
