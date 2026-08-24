@@ -10,7 +10,10 @@ const {
   Events,
   GatewayIntentBits,
   MessageFlags,
+  ModalBuilder,
   Partials,
+  TextInputBuilder,
+  TextInputStyle,
 } = require('discord.js');
 
 require('dotenv').config();
@@ -52,6 +55,20 @@ function makeReviewButtons(draftId, disabled = false) {
   );
 }
 
+function makeConversationButtons(senderId, recipientId, acknowledged = false) {
+  return new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId(`dm-ack:${senderId}:${recipientId}`)
+      .setLabel(acknowledged ? 'Acknowledged' : 'Acknowledge')
+      .setStyle(acknowledged ? ButtonStyle.Success : ButtonStyle.Primary)
+      .setDisabled(acknowledged),
+    new ButtonBuilder()
+      .setCustomId(`dm-reply:${senderId}:${recipientId}`)
+      .setLabel('Reply')
+      .setStyle(ButtonStyle.Secondary),
+  );
+}
+
 function formatIncomingMessage(message) {
   const parts = [];
 
@@ -74,13 +91,24 @@ function errorSummary(error) {
   return 'Discord did not provide an error code.';
 }
 
-async function notifyOwner(content) {
+async function notifyUser(userId, messageOptions) {
   try {
-    const owner = await client.users.fetch(config.ownerId);
-    await owner.send({ content, allowedMentions: { parse: [] } });
+    const user = await client.users.fetch(userId);
+    const options = typeof messageOptions === 'string'
+      ? { content: messageOptions }
+      : messageOptions;
+
+    await user.send({
+      ...options,
+      allowedMentions: { parse: [] },
+    });
   } catch (error) {
-    console.error('Could not DM the owner:', error);
+    console.error(`Could not DM user ${userId}:`, error);
   }
+}
+
+function isAuthorizedUser(userId) {
+  return config.authorizedUserIds.has(userId);
 }
 
 async function createDmReview(message, rawArguments) {
@@ -130,7 +158,7 @@ async function createDmReview(message, rawArguments) {
   pendingDrafts.set(draftId, {
     content: dmContent,
     expiresAt: Date.now() + config.draftLifetimeMs,
-    ownerId: message.author.id,
+    requesterId: message.author.id,
     reviewMessage,
     targetId: target.id,
     targetTag: target.tag,
@@ -155,15 +183,166 @@ async function createDmReview(message, rawArguments) {
   expiryTimer.unref();
 }
 
-async function handleReviewButton(interaction) {
+function parseConversationButton(customId, expectedAction) {
+  const parts = customId.split(':');
+  if (parts[0] !== expectedAction) return null;
+
+  // Supports acknowledgement buttons sent by the previous bot version.
+  if (expectedAction === 'dm-ack' && parts.length === 2) {
+    return { senderId: config.ownerId, recipientId: parts[1] };
+  }
+
+  if (parts.length !== 3) return null;
+  return { senderId: parts[1], recipientId: parts[2] };
+}
+
+function validConversationParticipants(senderId, recipientId) {
+  return /^\d{17,20}$/.test(senderId) && /^\d{17,20}$/.test(recipientId);
+}
+
+async function handleAcknowledgementButton(interaction) {
+  const participants = parseConversationButton(interaction.customId, 'dm-ack');
+
+  if (
+    !participants ||
+    !validConversationParticipants(participants.senderId, participants.recipientId) ||
+    interaction.user.id !== participants.recipientId
+  ) {
+    await interaction.reply({
+      content: 'Only the intended recipient can acknowledge this message.',
+      flags: MessageFlags.Ephemeral,
+    });
+    return;
+  }
+
+  await interaction.deferUpdate();
+
+  try {
+    await interaction.message.edit({
+      content: interaction.message.content,
+      embeds: interaction.message.embeds,
+      components: [
+        makeConversationButtons(
+          participants.senderId,
+          participants.recipientId,
+          true,
+        ),
+      ],
+    });
+  } catch (error) {
+    console.error('Could not disable the acknowledgement button:', error);
+  }
+
+  await notifyUser(
+    participants.senderId,
+    `☑️ ${interaction.user.tag} (${interaction.user.id}) acknowledged your message.\n` +
+      `Message ID: ${interaction.message.id}`,
+  );
+}
+
+async function handleReplyButton(interaction) {
+  const participants = parseConversationButton(interaction.customId, 'dm-reply');
+
+  if (
+    !participants ||
+    !validConversationParticipants(participants.senderId, participants.recipientId) ||
+    interaction.user.id !== participants.recipientId
+  ) {
+    await interaction.reply({
+      content: 'Only the intended recipient can reply to this message.',
+      flags: MessageFlags.Ephemeral,
+    });
+    return;
+  }
+
+  const modal = new ModalBuilder()
+    .setCustomId(
+      `dm-reply-modal:${participants.senderId}:${participants.recipientId}:${interaction.message.id}`,
+    )
+    .setTitle('Reply to this message')
+    .addComponents(
+      new ActionRowBuilder().addComponents(
+        new TextInputBuilder()
+          .setCustomId('dm-reply-text')
+          .setLabel('Your reply')
+          .setStyle(TextInputStyle.Paragraph)
+          .setRequired(true)
+          .setMaxLength(1800),
+      ),
+    );
+
+  await interaction.showModal(modal);
+}
+
+async function handleReplyModal(interaction) {
+  const match = interaction.customId.match(
+    /^dm-reply-modal:(\d{17,20}):(\d{17,20}):(\d{17,20})$/,
+  );
+
+  if (!match || interaction.user.id !== match[2]) {
+    await interaction.reply({
+      content: 'Only the intended recipient can submit this reply.',
+      flags: MessageFlags.Ephemeral,
+    });
+    return;
+  }
+
+  const targetId = match[1];
+  const responderId = match[2];
+  const originalMessageId = match[3];
+  const replyText = interaction.fields.getTextInputValue('dm-reply-text').trim();
+
+  await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
+  if (!replyText) {
+    await interaction.editReply('Your reply cannot be empty.');
+    return;
+  }
+
+  try {
+    const target = await client.users.fetch(targetId);
+    await target.send({
+      content:
+        `📨 Reply from ${interaction.user.tag} (${responderId}):\n\n${replyText}\n\n` +
+        `Replying to message ID: ${originalMessageId}`,
+      components: [makeConversationButtons(responderId, targetId)],
+      allowedMentions: { parse: [] },
+    });
+
+    await interaction.editReply(`✅ Reply sent successfully to ${target.tag}.`);
+  } catch (error) {
+    console.error('Could not send the button reply:', error);
+    await interaction.editReply(
+      `❌ The reply could not be sent. ${errorSummary(error)}`,
+    );
+  }
+}
+
+async function handleInteraction(interaction) {
+  if (interaction.isModalSubmit() && interaction.customId.startsWith('dm-reply-modal:')) {
+    await handleReplyModal(interaction);
+    return;
+  }
+
   if (!interaction.isButton()) return;
+
+  if (interaction.customId.startsWith('dm-ack:')) {
+    await handleAcknowledgementButton(interaction);
+    return;
+  }
+
+  if (interaction.customId.startsWith('dm-reply:')) {
+    await handleReplyButton(interaction);
+    return;
+  }
+
   if (!interaction.customId.startsWith('dm-send:') && !interaction.customId.startsWith('dm-cancel:')) {
     return;
   }
 
-  if (interaction.user.id !== config.ownerId) {
+  if (!isAuthorizedUser(interaction.user.id)) {
     await interaction.reply({
-      content: 'Only the configured bot owner can approve or cancel this DM.',
+      content: 'You are not authorized to approve or cancel DM drafts.',
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -174,7 +353,7 @@ async function handleReviewButton(interaction) {
 
   const draft = pendingDrafts.get(draftId);
 
-  if (!draft || draft.ownerId !== interaction.user.id || draft.expiresAt <= Date.now()) {
+  if (!draft || draft.requesterId !== interaction.user.id || draft.expiresAt <= Date.now()) {
     pendingDrafts.delete(draftId);
     await interaction.message.edit({
       content: 'This DM draft is no longer available.',
@@ -204,6 +383,7 @@ async function handleReviewButton(interaction) {
     const target = await client.users.fetch(draft.targetId);
     sentMessage = await target.send({
       content: draft.content,
+      components: [makeConversationButtons(draft.requesterId, target.id)],
       allowedMentions: { parse: [] },
     });
   } catch (error) {
@@ -219,7 +399,8 @@ async function handleReviewButton(interaction) {
       console.error('Could not update the failed DM review:', editError);
     }
 
-    await notifyOwner(
+    await notifyUser(
+      draft.requesterId,
       `❌ DM to ${draft.targetTag} (${draft.targetId}) was unsuccessful. ` +
         `They may have DMs disabled or may have blocked the bot. ${errorSummary(error)}`,
     );
@@ -236,31 +417,88 @@ async function handleReviewButton(interaction) {
     console.error('The DM sent, but the review message could not be updated:', error);
   }
 
-  await notifyOwner(
+  await notifyUser(
+    draft.requesterId,
     `✅ DM sent successfully to ${draft.targetTag} (${draft.targetId}).\n` +
       `Message ID: ${sentMessage.id}`,
   );
 }
 
-async function handleDirectMessage(message) {
-  if (message.author.id !== config.ownerId) {
-    const replyLabel = message.reference?.messageId
-      ? `They replied to message ID ${message.reference.messageId}.`
-      : 'They sent the bot a direct message.';
+function getConversationParticipants(message) {
+  for (const row of message.components || []) {
+    for (const component of row.components || []) {
+      const customId = component.customId || component.data?.customId;
+      if (!customId) continue;
 
-    await notifyOwner(
-      `📩 DM received from ${message.author.tag} (${message.author.id}).\n` +
-        `${replyLabel}\n\n${truncate(formatIncomingMessage(message))}`,
-    );
-    return;
+      const participants =
+        parseConversationButton(customId, 'dm-reply') ||
+        parseConversationButton(customId, 'dm-ack');
+
+      if (
+        participants &&
+        validConversationParticipants(participants.senderId, participants.recipientId)
+      ) {
+        return participants;
+      }
+    }
   }
 
-  if (!message.content.startsWith(config.prefix)) return;
+  return null;
+}
+
+async function forwardDirectMessage(message) {
+  let notificationTargetId = null;
+
+  if (message.reference?.messageId) {
+    try {
+      const referencedMessage = await message.channel.messages.fetch(message.reference.messageId);
+      const participants = getConversationParticipants(referencedMessage);
+
+      if (participants?.recipientId === message.author.id) {
+        notificationTargetId = participants.senderId;
+      }
+    } catch (error) {
+      console.error('Could not resolve the referenced DM:', error);
+    }
+  }
+
+  if (!notificationTargetId && message.author.id !== config.ownerId) {
+    notificationTargetId = config.ownerId;
+  }
+
+  if (!notificationTargetId) return;
+
+  const replyLabel = message.reference?.messageId
+    ? `They replied to message ID ${message.reference.messageId}.`
+    : 'They sent the bot a direct message.';
+
+  await notifyUser(notificationTargetId, {
+    content:
+      `📩 DM received from ${message.author.tag} (${message.author.id}).\n` +
+      `${replyLabel}\n\n${truncate(formatIncomingMessage(message))}`,
+    components: [makeConversationButtons(message.author.id, notificationTargetId)],
+  });
+}
+
+async function handleDirectMessage(message) {
+  if (!message.content.startsWith(config.prefix)) {
+    await forwardDirectMessage(message);
+    return;
+  }
 
   const withoutPrefix = message.content.slice(config.prefix.length).trim();
   const firstSpace = withoutPrefix.indexOf(' ');
   const command = (firstSpace === -1 ? withoutPrefix : withoutPrefix.slice(0, firstSpace)).toLowerCase();
   const rawArguments = firstSpace === -1 ? '' : withoutPrefix.slice(firstSpace + 1).trim();
+
+  if (!isAuthorizedUser(message.author.id)) {
+    if (command === 'dm') {
+      await message.reply('You are not authorized to use the DM command.');
+    } else {
+      await forwardDirectMessage(message);
+    }
+    return;
+  }
 
   if (command === 'dm') {
     await createDmReview(message, rawArguments);
@@ -281,14 +519,14 @@ client.once(Events.ClientReady, (readyClient) => {
 
 client.on(Events.InteractionCreate, async (interaction) => {
   try {
-    await handleReviewButton(interaction);
+    await handleInteraction(interaction);
   } catch (error) {
-    console.error('Button interaction failed:', error);
+    console.error('Interaction failed:', error);
 
     if (interaction.isRepliable() && !interaction.deferred && !interaction.replied) {
       try {
         await interaction.reply({
-          content: 'Something went wrong while handling that button. Please create a new DM draft.',
+          content: 'Something went wrong while handling that interaction. Please try again.',
           flags: MessageFlags.Ephemeral,
         });
       } catch (replyError) {
@@ -341,15 +579,23 @@ client.on(Events.MessageCreate, async (message) => {
 
 client.on(Events.MessageReactionAdd, async (reaction, user) => {
   try {
-    if (user.bot || user.id === config.ownerId) return;
+    if (user.bot) return;
     if (reaction.partial) await reaction.fetch();
     if (reaction.message.partial) await reaction.message.fetch();
 
     if (reaction.message.channel.type !== ChannelType.DM) return;
     if (reaction.message.author?.id !== client.user.id) return;
 
+    const participants = getConversationParticipants(reaction.message);
+    if (!participants && user.id === config.ownerId) return;
+
+    const notificationTargetId =
+      participants?.recipientId === user.id
+        ? participants.senderId
+        : config.ownerId;
     const originalText = truncate(reaction.message.content || '[No text content]', 750);
-    await notifyOwner(
+    await notifyUser(
+      notificationTargetId,
       `🔔 ${user.tag} (${user.id}) reacted ${reaction.emoji} to a bot DM.\n\n` +
         `Original message:\n${originalText}`,
     );
