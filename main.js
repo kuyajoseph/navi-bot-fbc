@@ -170,19 +170,25 @@ async function handleReviewButton(interaction) {
   }
 
   const [action, draftId] = interaction.customId.split(':');
+  await interaction.deferUpdate();
+
   const draft = pendingDrafts.get(draftId);
 
   if (!draft || draft.ownerId !== interaction.user.id || draft.expiresAt <= Date.now()) {
     pendingDrafts.delete(draftId);
-    await interaction.update({
+    await interaction.message.edit({
       content: 'This DM draft is no longer available.',
+      embeds: interaction.message.embeds,
       components: [makeReviewButtons(draftId, true)],
     });
     return;
   }
 
   pendingDrafts.delete(draftId);
-  await interaction.update({ components: [makeReviewButtons(draftId, true)] });
+  await interaction.message.edit({
+    embeds: interaction.message.embeds,
+    components: [makeReviewButtons(draftId, true)],
+  });
 
   if (action === 'dm-cancel') {
     await interaction.message.edit({
@@ -273,10 +279,23 @@ client.once(Events.ClientReady, (readyClient) => {
   readyClient.user.setActivity('hacking a mainframe', { type: ActivityType.Playing });
 });
 
-client.on(Events.InteractionCreate, (interaction) => {
-  handleReviewButton(interaction).catch((error) => {
+client.on(Events.InteractionCreate, async (interaction) => {
+  try {
+    await handleReviewButton(interaction);
+  } catch (error) {
     console.error('Button interaction failed:', error);
-  });
+
+    if (interaction.isRepliable() && !interaction.deferred && !interaction.replied) {
+      try {
+        await interaction.reply({
+          content: 'Something went wrong while handling that button. Please create a new DM draft.',
+          flags: MessageFlags.Ephemeral,
+        });
+      } catch (replyError) {
+        console.error('Could not report the button failure:', replyError);
+      }
+    }
+  }
 });
 
 client.on(Events.MessageCreate, async (message) => {
