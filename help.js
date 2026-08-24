@@ -1,15 +1,14 @@
 module.exports = {
-    'help': {
-      description: 'Shows the list of commands or help on specified command.',
-      format: 'help [command-name]'
-    },
-    'ping': {
-      description: 'Checks connectivity with discord\'s servers.',
-      format: 'ping'
-    },
-    'say': {
-      aliases: ['repeat'],
-      description: 'Repeats whatever is said.',
-      format: 'say <message>'
-    }
-  }
+  dm: {
+    description: 'Creates a private DM draft with Send and Cancel review buttons.',
+    format: 'dm USER_ID <message>',
+  },
+  help: {
+    description: 'Shows the available private commands.',
+    format: 'help',
+  },
+  ping: {
+    description: 'Checks connectivity with Discord.',
+    format: 'ping',
+  },
+};

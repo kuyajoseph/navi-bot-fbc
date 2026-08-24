@@ -1,22 +1,21 @@
 {
   "name": "navi-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "Discord bot with owner-reviewed DMs and reply/reaction notifications",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --check main.js && node --check config.js && node --check help.js && node --check server.js",
     "dev": "nodemon main.js",
     "start": "node main.js"
   },
   "author": "Joseph",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/voice": "^0.11.0",
-    "discord.js": "^13.9.1",
-    "dotenv": "^10.0.0",
+    "discord.js": "^14.22.1",
+    "dotenv": "^16.6.1",
     "express": "^4.18.1"
   },
   "engines": {
-    "node": "16.9.1"
+    "node": "22.x"
   }
 }
