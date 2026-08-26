@@ -8,7 +8,9 @@ const {
   Client,
   EmbedBuilder,
   Events,
+  FileUploadBuilder,
   GatewayIntentBits,
+  LabelBuilder,
   MessageFlags,
   ModalBuilder,
   Partials,
@@ -74,10 +76,53 @@ function formatIncomingMessage(message) {
 
   if (message.content) parts.push(message.content);
   for (const attachment of message.attachments.values()) {
-    parts.push(`[Attachment: ${attachment.name || 'file'}] ${attachment.url}`);
+    if (isSupportedMediaAttachment(attachment)) {
+      parts.push(`[Attached media: ${attachment.name || 'file'}]`);
+    } else {
+      parts.push(`[Unsupported attachment: ${attachment.name || 'file'}] ${attachment.url}`);
+    }
   }
 
   return parts.join('\n') || '[No text content]';
+}
+
+const supportedMediaExtensions = /\.(?:apng|avif|gif|jpe?g|png|webp|m4v|mov|mp4|mpeg|mpg|webm)$/i;
+
+function isSupportedMediaAttachment(attachment) {
+  const contentType = attachment.contentType || '';
+  return (
+    contentType.startsWith('image/') ||
+    contentType.startsWith('video/') ||
+    supportedMediaExtensions.test(attachment.name || '')
+  );
+}
+
+function getMediaAttachments(attachments) {
+  return [...attachments.values()].filter(isSupportedMediaAttachment);
+}
+
+function makeDiscordFiles(attachments) {
+  return attachments.map((attachment) => ({
+    attachment: attachment.url,
+    name: attachment.name || 'media-file',
+  }));
+}
+
+function formatFileSize(bytes) {
+  if (!Number.isFinite(bytes) || bytes < 1) return 'unknown size';
+  if (bytes < 1024 * 1024) return `${Math.ceil(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function formatAttachmentList(attachments) {
+  return truncate(
+    attachments
+      .map((attachment) =>
+        `• ${attachment.name || 'media-file'} (${formatFileSize(attachment.size)})`,
+      )
+      .join('\n'),
+    1024,
+  );
 }
 
 function truncate(text, maxLength = 1500) {
@@ -112,21 +157,47 @@ function isAuthorizedUser(userId) {
 }
 
 async function createDmReview(message, rawArguments) {
-  const match = rawArguments.match(/^(?:<@!?(\d{17,20})>|(\d{17,20}))\s+([\s\S]+)$/);
+  const match = rawArguments.match(
+    /^(?:<@!?(\d{17,20})>|(\d{17,20}))(?:\s+([\s\S]+))?$/,
+  );
 
   if (!match) {
     await message.reply(
-      `Usage: \`${config.prefix}dm USER_ID your message here\`\n` +
-        `You can also use a mention in place of \`USER_ID\`.`,
+      `Usage: \`${config.prefix}dm USER_ID [message]\`\n` +
+        `You can also use a mention and attach up to 10 images or videos.`,
     );
     return;
   }
 
   const targetId = match[1] || match[2];
-  const dmContent = match[3].trim();
+  const dmContent = (match[3] || '').trim();
+  const allAttachments = [...message.attachments.values()];
+  const mediaAttachments = getMediaAttachments(message.attachments);
+  const unsupportedAttachments = allAttachments.filter(
+    (attachment) => !isSupportedMediaAttachment(attachment),
+  );
 
-  if (!dmContent || dmContent.length > 2000) {
-    await message.reply('The DM must contain between 1 and 2,000 characters.');
+  if (unsupportedAttachments.length) {
+    await message.reply(
+      `Only image and video attachments are supported. Remove: ${unsupportedAttachments
+        .map((attachment) => attachment.name || 'unnamed file')
+        .join(', ')}`,
+    );
+    return;
+  }
+
+  if (mediaAttachments.length > 10) {
+    await message.reply('You can attach up to 10 images or videos to one DM.');
+    return;
+  }
+
+  if (!dmContent && mediaAttachments.length === 0) {
+    await message.reply('Add a message, an image/video attachment, or both.');
+    return;
+  }
+
+  if (dmContent.length > 2000) {
+    await message.reply('The DM message cannot exceed 2,000 characters.');
     return;
   }
 
@@ -145,9 +216,16 @@ async function createDmReview(message, rawArguments) {
     .setTitle('Review this DM before sending')
     .addFields(
       { name: 'Recipient', value: `${target.tag} (${target.id})` },
-      { name: 'Message', value: dmContent },
+      { name: 'Message', value: dmContent || '[No text — attachment only]' },
     )
     .setFooter({ text: `This draft expires in ${config.draftLifetimeMinutes} minutes.` });
+
+  if (mediaAttachments.length) {
+    embed.addFields({
+      name: `Images/videos (${mediaAttachments.length})`,
+      value: formatAttachmentList(mediaAttachments),
+    });
+  }
 
   const reviewMessage = await message.reply({
     embeds: [embed],
@@ -156,6 +234,12 @@ async function createDmReview(message, rawArguments) {
   });
 
   pendingDrafts.set(draftId, {
+    attachments: mediaAttachments.map((attachment) => ({
+      contentType: attachment.contentType,
+      name: attachment.name,
+      size: attachment.size,
+      url: attachment.url,
+    })),
     content: dmContent,
     expiresAt: Date.now() + config.draftLifetimeMs,
     requesterId: message.author.id,
@@ -261,14 +345,26 @@ async function handleReplyButton(interaction) {
     )
     .setTitle('Reply to this message')
     .addComponents(
-      new ActionRowBuilder().addComponents(
-        new TextInputBuilder()
-          .setCustomId('dm-reply-text')
-          .setLabel('Your reply')
-          .setStyle(TextInputStyle.Paragraph)
-          .setRequired(true)
-          .setMaxLength(1800),
-      ),
+      new LabelBuilder()
+        .setLabel('Your reply (optional with media)')
+        .setDescription('Type a reply, attach media below, or do both.')
+        .setTextInputComponent(
+          new TextInputBuilder()
+            .setCustomId('dm-reply-text')
+            .setStyle(TextInputStyle.Paragraph)
+            .setRequired(false)
+            .setMaxLength(1600),
+        ),
+      new LabelBuilder()
+        .setLabel('Images or videos (optional)')
+        .setDescription('Upload up to 10 files allowed by your Discord limit.')
+        .setFileUploadComponent(
+          new FileUploadBuilder()
+            .setCustomId('dm-reply-files')
+            .setMinValues(0)
+            .setMaxValues(10)
+            .setRequired(false),
+        ),
     );
 
   await interaction.showModal(modal);
@@ -291,25 +387,38 @@ async function handleReplyModal(interaction) {
   const responderId = match[2];
   const originalMessageId = match[3];
   const replyText = interaction.fields.getTextInputValue('dm-reply-text').trim();
+  const uploadedFiles = interaction.fields.getUploadedFiles('dm-reply-files') || new Map();
+  const allAttachments = [...uploadedFiles.values()];
+  const mediaAttachments = allAttachments.filter(isSupportedMediaAttachment);
 
   await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-  if (!replyText) {
-    await interaction.editReply('Your reply cannot be empty.');
+  if (allAttachments.some((attachment) => !isSupportedMediaAttachment(attachment))) {
+    await interaction.editReply('Only image and video attachments are supported.');
+    return;
+  }
+
+  if (!replyText && mediaAttachments.length === 0) {
+    await interaction.editReply('Add reply text, an image/video attachment, or both.');
     return;
   }
 
   try {
     const target = await client.users.fetch(targetId);
+    const replyBody = replyText ? `\n\n${replyText}` : '';
     await target.send({
       content:
-        `📨 Reply from ${interaction.user.tag} (${responderId}):\n\n${replyText}\n\n` +
+        `📨 Reply from ${interaction.user.tag} (${responderId}):${replyBody}\n\n` +
         `Replying to message ID: ${originalMessageId}`,
       components: [makeConversationButtons(responderId, targetId)],
+      files: makeDiscordFiles(mediaAttachments),
       allowedMentions: { parse: [] },
     });
 
-    await interaction.editReply(`✅ Reply sent successfully to ${target.tag}.`);
+    const mediaNote = mediaAttachments.length
+      ? ` with ${mediaAttachments.length} image/video attachment${mediaAttachments.length === 1 ? '' : 's'}`
+      : '';
+    await interaction.editReply(`✅ Reply sent successfully to ${target.tag}${mediaNote}.`);
   } catch (error) {
     console.error('Could not send the button reply:', error);
     await interaction.editReply(
@@ -382,8 +491,9 @@ async function handleInteraction(interaction) {
   try {
     const target = await client.users.fetch(draft.targetId);
     sentMessage = await target.send({
-      content: draft.content,
+      content: draft.content || undefined,
       components: [makeConversationButtons(draft.requesterId, target.id)],
+      files: makeDiscordFiles(draft.attachments),
       allowedMentions: { parse: [] },
     });
   } catch (error) {
@@ -420,7 +530,10 @@ async function handleInteraction(interaction) {
   await notifyUser(
     draft.requesterId,
     `✅ DM sent successfully to ${draft.targetTag} (${draft.targetId}).\n` +
-      `Message ID: ${sentMessage.id}`,
+      `Message ID: ${sentMessage.id}` +
+      (draft.attachments.length
+        ? `\nAttachments: ${draft.attachments.length} image/video file${draft.attachments.length === 1 ? '' : 's'}`
+        : ''),
   );
 }
 
@@ -477,6 +590,7 @@ async function forwardDirectMessage(message) {
       `📩 DM received from ${message.author.tag} (${message.author.id}).\n` +
       `${replyLabel}\n\n${truncate(formatIncomingMessage(message))}`,
     components: [makeConversationButtons(message.author.id, notificationTargetId)],
+    files: makeDiscordFiles(getMediaAttachments(message.attachments)),
   });
 }
 
@@ -552,7 +666,8 @@ client.on(Events.MessageCreate, async (message) => {
 
     if (command === 'help') {
       await message.channel.send(
-        `DM me \`${config.prefix}dm USER_ID your message\` to create an owner-reviewed DM.`,
+        `DM me \`${config.prefix}dm USER_ID [message]\` with optional image/video attachments ` +
+          'to create a reviewed DM.',
       );
     } else if (command === 'welcome') {
       await message.channel.send(
