@@ -11,4 +11,8 @@ module.exports = {
     description: 'Checks connectivity with Discord.',
     format: 'ping',
   },
+  purge: {
+    description: 'Owner only: purges Navi-authored messages exchanged with one user.',
+    format: 'purge USER_ID',
+  },
 };

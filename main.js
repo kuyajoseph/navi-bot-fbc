@@ -42,6 +42,21 @@ const client = new Client({
 
 const pendingDrafts = new Map();
 
+function makePurgeButtons(targetId, disabled = false) {
+  return new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId(`purge-confirm:${targetId}`)
+      .setLabel('Purge Messages')
+      .setStyle(ButtonStyle.Danger)
+      .setDisabled(disabled),
+    new ButtonBuilder()
+      .setCustomId(`purge-cancel:${targetId}`)
+      .setLabel('Cancel')
+      .setStyle(ButtonStyle.Secondary)
+      .setDisabled(disabled),
+  );
+}
+
 function makeReviewButtons(draftId, disabled = false) {
   return new ActionRowBuilder().addComponents(
     new ButtonBuilder()
@@ -149,6 +164,166 @@ async function notifyUser(userId, messageOptions) {
     });
   } catch (error) {
     console.error(`Could not DM user ${userId}:`, error);
+  }
+}
+
+function componentContainsUserId(component, userId) {
+  const customId = component.customId || component.data?.customId;
+  if (customId?.split(':').includes(userId)) return true;
+
+  return (component.components || []).some((child) =>
+    componentContainsUserId(child, userId),
+  );
+}
+
+function botMessageReferencesUser(message, userId) {
+  if (message.author?.id !== client.user.id) return false;
+  if (message.content?.includes(userId)) return true;
+
+  const embedText = (message.embeds || [])
+    .map((embed) => JSON.stringify(embed.toJSON ? embed.toJSON() : embed.data || embed))
+    .join('\n');
+  if (embedText.includes(userId)) return true;
+
+  return (message.components || []).some((component) =>
+    componentContainsUserId(component, userId),
+  );
+}
+
+async function deleteBotMessages(channel, shouldDelete) {
+  let before;
+  let deleted = 0;
+  const failures = [];
+
+  while (true) {
+    const batch = await channel.messages.fetch({ limit: 100, before });
+    if (batch.size === 0) break;
+
+    const oldestMessage = batch.last();
+    before = oldestMessage.id;
+
+    for (const message of batch.values()) {
+      if (message.author?.id !== client.user.id || !shouldDelete(message)) continue;
+
+      try {
+        await message.delete();
+        deleted += 1;
+      } catch (error) {
+        failures.push({ error, messageId: message.id });
+        console.error(`Could not delete bot DM ${message.id}:`, error);
+      }
+    }
+
+    if (batch.size < 100) break;
+  }
+
+  return { deleted, failures };
+}
+
+async function createPurgeReview(message, rawArguments) {
+  if (message.author.id !== config.ownerId) {
+    await message.reply('Only the bot owner can use the purge command.');
+    return;
+  }
+
+  const match = rawArguments.match(/^(?:<@!?(\d{17,20})>|(\d{17,20}))$/);
+  if (!match) {
+    await message.reply(`Usage: \`${config.prefix}purge USER_ID\``);
+    return;
+  }
+
+  const targetId = match[1] || match[2];
+  if (targetId === config.ownerId) {
+    await message.reply('Enter the other user\'s ID, not your own.');
+    return;
+  }
+
+  let target;
+  try {
+    target = await client.users.fetch(targetId);
+  } catch (error) {
+    console.error('Could not find the purge target:', error);
+    await message.reply('I could not find that Discord user. Double-check the user ID.');
+    return;
+  }
+
+  await message.reply({
+    content:
+      `Purge Navi's messages exchanged between you and ${target.tag} (${target.id})?\n\n` +
+      'This removes Navi-authored messages from both DM conversations. Discord does not allow ' +
+      'bots to delete messages written by either user. This action cannot be undone.',
+    components: [makePurgeButtons(target.id)],
+    allowedMentions: { parse: [] },
+  });
+}
+
+async function handlePurgeButton(interaction) {
+  const match = interaction.customId.match(/^purge-(confirm|cancel):(\d{17,20})$/);
+  if (!match) return;
+
+  if (interaction.user.id !== config.ownerId) {
+    await interaction.reply({
+      content: 'Only the bot owner can use this control.',
+      flags: MessageFlags.Ephemeral,
+    });
+    return;
+  }
+
+  const action = match[1];
+  const targetId = match[2];
+  await interaction.deferUpdate();
+
+  if (action === 'cancel') {
+    await interaction.message.edit({
+      content: 'Purge cancelled. Nothing was deleted.',
+      components: [makePurgeButtons(targetId, true)],
+    });
+    return;
+  }
+
+  await interaction.message.edit({
+    content: 'Purging Navi-authored messages now…',
+    components: [makePurgeButtons(targetId, true)],
+  });
+
+  try {
+    const target = await client.users.fetch(targetId);
+    const targetChannel = await target.createDM();
+    const ownerChannel = interaction.channel;
+
+    const targetResult = await deleteBotMessages(
+      targetChannel,
+      (message) => botMessageReferencesUser(message, config.ownerId),
+    );
+    const ownerResult = await deleteBotMessages(
+      ownerChannel,
+      (message) => botMessageReferencesUser(message, targetId),
+    );
+    const failures = [...targetResult.failures, ...ownerResult.failures];
+    const deleted = targetResult.deleted + ownerResult.deleted;
+
+    if (failures.length > 0) {
+      await notifyUser(
+        config.ownerId,
+        `⚠️ Purge incomplete for ${target.tag} (${target.id}). ` +
+          `Deleted ${deleted} Navi-authored message${deleted === 1 ? '' : 's'}, but ` +
+          `${failures.length} could not be deleted. No notification was sent to the other user.`,
+      );
+      return;
+    }
+
+    await notifyUser(
+      config.ownerId,
+      `✅ Purge complete for ${target.tag} (${target.id}). ` +
+        `Deleted ${deleted} Navi-authored message${deleted === 1 ? '' : 's'} from both sides. ` +
+        'No notification was sent to the other user. User-authored messages remain because Discord prevents bots from deleting them.',
+    );
+  } catch (error) {
+    console.error('Purge failed:', error);
+    await notifyUser(
+      config.ownerId,
+      `❌ Purge failed before completion for user ${targetId}. No notification was sent to the other user. ${errorSummary(error)}`,
+    );
   }
 }
 
@@ -435,6 +610,11 @@ async function handleInteraction(interaction) {
 
   if (!interaction.isButton()) return;
 
+  if (interaction.customId.startsWith('purge-')) {
+    await handlePurgeButton(interaction);
+    return;
+  }
+
   if (interaction.customId.startsWith('dm-ack:')) {
     await handleAcknowledgementButton(interaction);
     return;
@@ -604,6 +784,11 @@ async function handleDirectMessage(message) {
   const firstSpace = withoutPrefix.indexOf(' ');
   const command = (firstSpace === -1 ? withoutPrefix : withoutPrefix.slice(0, firstSpace)).toLowerCase();
   const rawArguments = firstSpace === -1 ? '' : withoutPrefix.slice(firstSpace + 1).trim();
+
+  if (command === 'purge') {
+    await createPurgeReview(message, rawArguments);
+    return;
+  }
 
   if (!isAuthorizedUser(message.author.id)) {
     if (command === 'dm') {

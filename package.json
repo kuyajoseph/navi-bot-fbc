@@ -1,7 +1,7 @@
 {
   "name": "navi-bot",
   "version": "1.0.0",
-  "description": "Discord bot with owner-reviewed DMs and reply/reaction notifications",
+  "description": "Discord bot with reviewed media DMs, two-way replies, and owner-only conversation purging",
   "main": "main.js",
   "scripts": {
     "test": "node --check main.js && node --check config.js && node --check help.js && node --check server.js",
